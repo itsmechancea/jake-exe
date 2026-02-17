@@ -1,0 +1,1090 @@
+index.html
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <div class="dots" aria-hidden="true">
+        <span class="dot red"></span><span class="dot amb"></span><span class="dot grn"></span>
+      </div>
+      <span>local • love-os</span>
+    </div>
+    <div class="badge">gift build: fiancé_patch_v2.0 • author: chance</div>
+  </div>
+
+  <div class="grid">
+    <!-- MAIN TERMINAL -->
+    <div class="panel" id="mainPanel">
+      <div class="panel-head">
+        <div class="title">
+          <span class="muted">~/projects/</span>
+          <span class="file">jake.exe</span>
+        </div>
+        <div class="status" id="statusPills"></div>
+      </div>
+
+      <div class="terminal" id="terminal" aria-live="polite"></div>
+
+      <div class="controls">
+        <button class="primary" id="next">run next()</button>
+        <button id="back">undo()</button>
+        <button id="random">rand()</button>
+        <button class="danger" id="replay">rebuild()</button>
+        <button id="bossBtn">bossfight()</button>
+      </div>
+
+      <div class="cmd">
+        <label for="command"><span class="prompt">$</span> command</label>
+        <input id="command"
+          placeholder="try: help • i_love_you • spiderman • treat() • commit --log • my whatever • jellybeans • marry me"
+          autocomplete="off"/>
+        <button class="send" id="send">enter</button>
+      </div>
+
+      <div class="footer">
+        <span class="small">Tip: press <b>run next()</b> like you’re deploying love to production.</span>
+        <span class="hint">Easter eggs: <b>help</b>, <b>i_love_you</b>, <b>spiderman</b>, <b>treat()</b>, <b>commit --log</b>, <b>my whatever</b>, <b>jellybeans</b>, <b>marry me</b></span>
+      </div>
+
+      <!-- Boss Fight Overlay -->
+      <div class="overlay" id="overlay">
+        <div class="boss">
+          <div class="boss-head">
+            <span>encounter: 03:00_LOW.exe</span>
+            <span class="pill warn">difficulty: hard mode</span>
+          </div>
+          <div class="boss-body">
+            <h3 class="boss-title">BOSS FIGHT: 3AM LOW</h3>
+            <div class="muted">The room is dark. The Dexcom whispers. Your body decides it’s time for chaos.</div>
+            <div class="hp"><div></div></div>
+            <div><span class="warn">status:</span> shaky.exe • sweaty.css • brainFog.js</div>
+            <div class="muted" style="margin-top:10px">
+              Choose your action (you always win, but still):
+            </div>
+            <div class="boss-actions">
+              <button id="actTreat">treat()</button>
+              <button id="actRecheck">recheck()</button>
+              <button id="actEaseOff">ease_off()</button>
+              <button id="actPanic">panic()</button>
+              <button class="primary" id="actWin">win_anyway()</button>
+              <button class="danger" id="closeBoss">escape()</button>
+            </div>
+            <div id="bossResult" class="muted" style="margin-top:12px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE STACK -->
+    <div class="side">
+      <!-- Quest log -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="title"><span class="file">questlog.md</span></div>
+          <div class="status"><span class="pill blue">party: chance + jake</span></div>
+        </div>
+        <div class="block">
+          <h2>Daily Quests (Jake Edition)</h2>
+          <p>
+            A nerdy tribute to the stuff you do every day that most people never notice.
+            <br/>Chance notices. Always.
+          </p>
+          <div class="list" id="questList"></div>
+        </div>
+        <div class="footer">
+          <span class="small">Loot: chemist jelly beans + choc teddies 🍬🐻 (legendary rarity)</span>
+        </div>
+      </div>
+
+      <!-- Fake Dexcom graph -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="title"><span class="file">dexcom_ui.mock</span></div>
+          <div class="status">
+            <span class="pill blue">CGM: Dexcom</span>
+            <span class="pill ok">signal: stable-ish</span>
+          </div>
+        </div>
+        <div class="block">
+          <h2>Totally Real Dexcom Graph</h2>
+          <p>(Aesthetic only. But the vibe is: you’re constantly managing invisible chaos like a legend.)</p>
+
+          <div class="dexcom">
+            <div class="dex-top">
+              <span>now: <span class="ok" id="dexNow">6.2 mmol/L</span></span>
+              <span>trend: <span class="blue" id="dexTrend">→ steady</span></span>
+              <span>time range: 3h</span>
+            </div>
+            <svg class="spark" viewBox="0 0 300 120" preserveAspectRatio="none">
+              <g opacity="0.35">
+                <line x1="0" y1="20" x2="300" y2="20" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
+                <line x1="0" y1="60" x2="300" y2="60" stroke="rgba(255,255,255,.14)" stroke-width="1"/>
+                <line x1="0" y1="100" x2="300" y2="100" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
+              </g>
+              <rect x="0" y="40" width="300" height="40" fill="rgba(96,255,154,.08)"></rect>
+              <path id="dexPath" d="" fill="none" stroke="rgba(122,167,255,.9)" stroke-width="3" stroke-linecap="round"></path>
+              <circle id="dexDot" cx="290" cy="60" r="4.5" fill="rgba(96,255,154,.95)"></circle>
+            </svg>
+
+            <div class="dex-row">
+              <span class="chip ok">in range-ish</span>
+              <span class="chip warn">after lunch: watch me</span>
+              <span class="chip err">blocked pump: villain arc</span>
+              <span class="chip blue">chance_buff: ON</span>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <span class="small">Friendly neighborhood Jake-man: with great power comes great responsibility (and emergency gulcogon).</span>
+        </div>
+      </div>
+
+      <!-- Commit history -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="title"><span class="file">git_log.txt</span></div>
+          <div class="status">
+            <span class="pill ok">branch: forever</span>
+          </div>
+        </div>
+        <div class="block">
+          <h2>Commit History</h2>
+          <p>Love, but make it version control.</p>
+          <div class="list" id="gitList"></div>
+        </div>
+        <div class="footer">
+          <span class="small">PS: no rollbacks allowed. you’re stuck with Chance.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+styles.css
+:root{
+  --bg:#05060a;
+  --panel:#0b1020;
+  --line:rgba(255,255,255,.14);
+  --text:#e9eefc;
+  --muted:rgba(233,238,252,.72);
+  --green:#60ff9a;
+  --amber:#ffd166;
+  --red:#ff5d7a;
+  --blue:#7aa7ff;
+  --shadow: 0 24px 80px rgba(0,0,0,.55);
+  --radius: 22px;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+  --sans: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:
+    radial-gradient(900px 500px at 20% -10%, rgba(122,167,255,.18), transparent 60%),
+    radial-gradient(900px 500px at 90% 0%, rgba(96,255,154,.13), transparent 55%),
+    radial-gradient(700px 500px at 40% 110%, rgba(255,93,122,.10), transparent 55%),
+    var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+.wrap{width:min(1080px,100%);}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:14px;
+  gap:12px;
+}
+.brand{
+  display:flex; align-items:center; gap:10px;
+  font-family:var(--mono);
+  letter-spacing:.2px;
+  opacity:.95;
+}
+.dots{display:flex; gap:8px; align-items:center}
+.dot{width:11px; height:11px; border-radius:99px; opacity:.9}
+.dot.red{background:var(--red)}
+.dot.amb{background:var(--amber)}
+.dot.grn{background:var(--green)}
+.badge{
+  font-family:var(--mono);
+  font-size:12px;
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.05);
+  color:var(--muted);
+  white-space:nowrap;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns: 1.45fr .95fr;
+  gap:14px;
+}
+@media (max-width: 980px){
+  .grid{grid-template-columns:1fr;}
+}
+
+.panel{
+  background: rgba(11,16,32,.72);
+  border:1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+  overflow:hidden;
+  position:relative;
+}
+.panel-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 16px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  font-family:var(--mono);
+  color:var(--muted);
+  gap:12px;
+}
+.panel-head .title{
+  display:flex; gap:10px; align-items:center;
+  min-width:0;
+}
+.file{
+  color:var(--text);
+  opacity:.95;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width: 520px;
+}
+.status{
+  display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;
+}
+.pill{
+  font-size:12px;
+  padding:7px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.22);
+  color:var(--muted);
+}
+.pill.ok{color:rgba(96,255,154,.95); border-color: rgba(96,255,154,.25);}
+.pill.warn{color:rgba(255,209,102,.95); border-color: rgba(255,209,102,.25);}
+.pill.err{color:rgba(255,93,122,.95); border-color: rgba(255,93,122,.25);}
+.pill.blue{color:rgba(122,167,255,.95); border-color: rgba(122,167,255,.25);}
+
+/* Terminal */
+.terminal{
+  padding:18px 18px 12px;
+  font-family:var(--mono);
+  font-size:15px;
+  line-height:1.55;
+  white-space:pre-wrap;
+  min-height: 320px;
+}
+.prompt{color:rgba(122,167,255,.95);}
+.ok{color:rgba(96,255,154,.95);}
+.warn{color:rgba(255,209,102,.95);}
+.err{color:rgba(255,93,122,.95);}
+.muted{color:var(--muted);}
+.caret{
+  display:inline-block;
+  width:10px;
+  margin-left:3px;
+  border-right:2px solid rgba(233,238,252,.75);
+  animation: blink .9s steps(2,end) infinite;
+  transform: translateY(2px);
+}
+@keyframes blink{50%{opacity:0}}
+
+/* Controls */
+.controls{
+  display:flex;
+  gap:10px;
+  padding: 0 18px 10px;
+  flex-wrap:wrap;
+}
+button{
+  font-family:var(--mono);
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.08);
+  color: var(--text);
+  padding: 11px 14px;
+  cursor:pointer;
+  transition: transform .06s ease, background .15s ease;
+  user-select:none;
+}
+button:hover{background: rgba(255,255,255,.11);}
+button:active{transform: scale(.985);}
+.primary{
+  background: rgba(96,255,154,.14);
+  border-color: rgba(96,255,154,.28);
+}
+.primary:hover{background: rgba(96,255,154,.18);}
+.danger{
+  background: rgba(255,93,122,.12);
+  border-color: rgba(255,93,122,.25);
+}
+.footer{
+  padding:12px 18px 16px;
+  border-top:1px solid rgba(255,255,255,.08);
+  color:var(--muted);
+  font-family:var(--mono);
+  font-size:12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.small{opacity:.85}
+.hint{
+  opacity:.85;
+  border:1px dashed rgba(255,255,255,.18);
+  padding:8px 10px;
+  border-radius: 14px;
+  background: rgba(0,0,0,.18);
+}
+
+/* Command line */
+.cmd{
+  padding: 0 18px 18px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+.cmd label{
+  font-family:var(--mono);
+  color:var(--muted);
+  font-size:13px;
+  white-space:nowrap;
+}
+.cmd input{
+  flex:1;
+  font-family:var(--mono);
+  font-size:14px;
+  padding: 12px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.26);
+  color: var(--text);
+  outline:none;
+}
+.cmd input:focus{border-color: rgba(122,167,255,.35);}
+.cmd .send{
+  padding: 11px 12px;
+  border-radius: 14px;
+  border:1px solid rgba(122,167,255,.28);
+  background: rgba(122,167,255,.14);
+}
+
+/* Right side stack */
+.side{display:flex; flex-direction:column; gap:14px;}
+.block{padding:16px 16px 18px;}
+.block h2{
+  margin:0 0 6px;
+  font-family:var(--sans);
+  font-size:16px;
+  letter-spacing:.2px;
+}
+.block p{
+  margin:0 0 12px;
+  color:var(--muted);
+  font-family:var(--sans);
+  font-size:13px;
+  line-height:1.45;
+}
+
+/* Quest list */
+.list{display:flex; flex-direction:column; gap:10px;}
+.item{
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.22);
+  border-radius: 16px;
+  padding: 12px 12px;
+  display:flex; align-items:flex-start; gap:10px;
+  font-family:var(--mono);
+  font-size:13px;
+  color:var(--muted);
+}
+.icon{
+  width:18px; height:18px; border-radius:6px;
+  border:1px solid rgba(255,255,255,.18);
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px;
+  flex: 0 0 auto;
+  margin-top:1px;
+}
+.icon.ok{border-color: rgba(96,255,154,.35); color: rgba(96,255,154,.95);}
+.icon.warn{border-color: rgba(255,209,102,.35); color: rgba(255,209,102,.95);}
+.icon.err{border-color: rgba(255,93,122,.35); color: rgba(255,93,122,.95);}
+.icon.blue{border-color: rgba(122,167,255,.35); color: rgba(122,167,255,.95);}
+
+/* Fake Dexcom graph */
+.dexcom{
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.22);
+  border-radius: 18px;
+  padding: 12px 12px 10px;
+}
+.dex-top{
+  display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:8px;
+}
+.spark{
+  width:100%;
+  height:120px;
+  border-radius: 14px;
+  border:1px solid rgba(255,255,255,.10);
+  background: linear-gradient(180deg, rgba(122,167,255,.10), rgba(0,0,0,.0));
+  display:block;
+}
+.dex-row{
+  display:flex;
+  gap:8px;
+  margin-top:10px;
+  flex-wrap:wrap;
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--muted);
+}
+.chip{
+  padding:7px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+}
+.chip.ok{border-color: rgba(96,255,154,.25); color: rgba(96,255,154,.9);}
+.chip.warn{border-color: rgba(255,209,102,.25); color: rgba(255,209,102,.9);}
+.chip.err{border-color: rgba(255,93,122,.25); color: rgba(255,93,122,.9);}
+.chip.blue{border-color: rgba(122,167,255,.25); color: rgba(122,167,255,.9);}
+
+/* Boss Fight Overlay */
+.overlay{
+  position:absolute;
+  inset:0;
+  background: radial-gradient(900px 520px at 35% 20%, rgba(255,93,122,.18), rgba(0,0,0,.86) 55%);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+}
+.overlay.show{display:flex;}
+.boss{
+  width:min(720px, 100%);
+  border-radius: 22px;
+  border:1px solid rgba(255,255,255,.16);
+  background: rgba(11,16,32,.75);
+  box-shadow: var(--shadow);
+  overflow:hidden;
+}
+.boss-head{
+  padding:14px 16px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  font-family:var(--mono);
+  color:var(--muted);
+}
+.boss-body{
+  padding:18px 16px 16px;
+  font-family:var(--mono);
+  line-height:1.55;
+}
+.boss-title{
+  font-family:var(--sans);
+  font-size:20px;
+  margin:0 0 10px;
+  letter-spacing:.2px;
+}
+.hp{
+  height:10px;
+  border-radius:999px;
+  background: rgba(255,255,255,.10);
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.12);
+  margin: 10px 0 14px;
+}
+.hp > div{
+  height:100%;
+  width: 72%;
+  background: linear-gradient(90deg, rgba(255,93,122,.75), rgba(255,209,102,.75));
+}
+.boss-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+.boss-actions button{
+  background: rgba(255,255,255,.08);
+}
+
+/* Boss fight click fix */
+.overlay { z-index: 9999; pointer-events: auto; }
+.boss, .boss * { pointer-events: auto; }
+.hp, .hp * { pointer-events: none; }
+.boss-actions { position: relative; z-index: 10; }
+
+/* spiderweb confetti */
+.web-confetti-layer{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10000;
+  overflow: hidden;
+}
+.web-confetti{
+  position: absolute;
+  top: -24px;
+  width: var(--s);
+  height: var(--s);
+  opacity: 0.95;
+  filter: drop-shadow(0 8px 10px rgba(0,0,0,.25));
+  transform: translate3d(0,0,0) rotate(0deg);
+  animation:
+    webFall var(--dur) linear forwards,
+    webWobble calc(var(--dur) * 0.55) ease-in-out infinite;
+}
+.web-confetti svg{
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+@keyframes webFall{
+  0%   { transform: translate3d(0, -20px, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate3d(var(--drift), 110vh, 0) rotate(720deg); opacity: 0.9; }
+}
+@keyframes webWobble{
+  0%, 100% { margin-left: 0px; }
+  50%      { margin-left: calc(var(--wobble) * 1px); }
+}
+script.js
+// ===== PERSONALIZE =====
+const profile = {
+  name: "Jake",
+  partner: "Chance",
+  cgm: "Dexcom",
+  emergencySnacks: "chemist jelly beans + choc teddies",
+  stack: "Unknown stack (but 100% includes ChatGPT-as-a-service)",
+  spidermanMode: true
+};
+
+// ===== STATUS PILL SETS =====
+const pillSets = [
+  [
+    {text:"build: green", cls:"ok"},
+    {text:"Dexcom: online", cls:"blue"},
+    {text:"pump: armed", cls:"ok"}
+  ],
+  [
+    {text:"warning: 03:00 event", cls:"warn"},
+    {text:"snack stash: stocked", cls:"ok"},
+    {text:"responsibility: great", cls:"blue"}
+  ],
+  [
+    {text:"sensor: ???", cls:"warn"},
+    {text:"vibes: immaculate", cls:"ok"},
+    {text:"math: unstoppable", cls:"blue"}
+  ],
+  [
+    {text:"blockage: detected", cls:"err"},
+    {text:"recovery: legendary", cls:"ok"},
+    {text:"villain: defeated", cls:"ok"}
+  ],
+  [
+    {text:"after-lunch drop: dodged", cls:"ok"},
+    {text:"ease-off: activated", cls:"blue"},
+    {text:"Chance buff: +999", cls:"ok"}
+  ],
+  [
+    {text:"ChatGPT: open (again)", cls:"warn"},
+    {text:"commit: love", cls:"ok"},
+    {text:"forever: true", cls:"ok"}
+  ]
+];
+
+// ===== QUEST LOG =====
+const quests = [
+  {icon:"✓", cls:"ok", text:"Carb-counting in your head like it’s casual (it’s not casual)"},
+  {icon:"⚡", cls:"blue", text:"Micro-decisions all day: bolus, adjust, predict, prevent"},
+  {icon:"!", cls:"warn", text:"3am low: wake up, treat, re-check, fight the boss, go back to sleep"},
+  {icon:"⛔", cls:"err", text:"Blocked pump: troubleshoot + swap site + keep breathing"},
+  {icon:"?", cls:"warn", text:"Failed sensor: restart, re-tape, re-try, carry on"},
+  {icon:"🍬", cls:"ok", text:`Emergency loot: ${profile.emergencySnacks}`}
+];
+
+// ===== COMMIT HISTORY =====
+const commits = [
+  {hash:"a1c3e9f", msg:"init: met Jake, immediately suspected he was main-character material"},
+  {hash:"b7d2c10", msg:"feat: discovered he’s quiet-soft AND big-gesture coded (dangerous combo)"},
+  {hash:"c0ffee0", msg:"chore: stocked emergency snacks (jelly beans + choc teddies) like a responsible teammate"},
+  {hash:"d3xC0m9", msg:"fix: survived Dexcom beeps + pump drama without rage-quitting love"},
+  {hash:"e5a5e0f", msg:"feat: learned the 3am low boss fight exists and started cheering from the party chat"},
+  {hash:"f17babe", msg:"release: fiancé_patch — forever enabled"}
+];
+
+// ===== TERMINAL SLIDES =====
+const slides = [
+`<span class="prompt">$</span> boot --target=${profile.name.toLowerCase()} --mode=fiancé
+<span class="ok">✓</span> initializing heart_module...
+<span class="ok">✓</span> loading patience.dll
+<span class="ok">✓</span> loading humor.js
+<span class="ok">✓</span> loading love.css (overrides everything)
+<span class="muted">info:</span> tech stack: ${profile.stack}
+<span class="muted">note:</span> user '${profile.name}' detected: quiet + sentimental + big-gesture energy
+<span class="ok">✓</span> ready.`,
+
+`<span class="prompt">$</span> scan --daily_processes
+Most people wake up and… exist.
+You wake up and instantly run background processes:
+  • check glucose
+  • interpret trends
+  • calculate insulin
+  • plan food/activity like chess
+
+And you do it quietly, like it’s normal.
+
+<span class="warn">⚠</span> reminder: “normal” ≠ “easy.”
+<span class="ok">✓</span> ${profile.partner} sees you.`,
+
+`<span class="prompt">$</span> play --soundtrack
+Some couples have “our song.”
+We have:
+  🎶 *beep* 🎶
+  🎶 *beep-beep* 🎶
+  🎶 “URGENT LOW” (a certified banger) 🎶
+
+Your ${profile.cgm} isn’t just noise.
+It’s proof you’re doing the work.
+Every day.
+Even when nobody claps for it.`,
+
+`<span class="prompt">$</span> encounter --time=03:00 --boss=LOW
+<span class="warn">event:</span> 3am low
+<span class="muted">symptoms:</span> sleep interrupted, body on hard mode, brain = fog.exe
+<span class="muted">response:</span> treat low, re-check, treat again if needed, try to go back to sleep
+
+<span class="ok">✓</span> outcome: you handled it.
+<span class="muted">side note:</span> you should not have to be this tough.
+And yet… you are.`,
+
+`<span class="prompt">$</span> lunch.exe --postmeal=watch
+<span class="warn">risk:</span> after-lunch drop
+<span class="muted">Jake move:</span> “ease off” so you don’t hypo later
+
+That’s the part that blows my mind:
+You’re constantly thinking ahead to protect future-you.
+You’re the brains for yourself <i>and</i> the CGM.`,
+
+`<span class="prompt">$</span> debug --issue="blocked pump"
+<span class="err">ERROR:</span> infusion blocked / delivery interrupted
+<span class="muted">recommended fix:</span> troubleshoot, swap site, restart, keep calm-ish
+
+And you do it.
+Even when it’s annoying.
+Even when it’s unfair.
+Even when it steals time and induces anxiety.
+
+<span class="ok">✓</span> ${profile.partner} update: I see the strength and resilience behind the calm exterior.`,
+
+`<span class="prompt">$</span> sensor.start --device=${profile.cgm.toLowerCase()}
+<span class="warn">WARNING:</span> sensor failed / won’t calibrate / adhesive said “not today”
+<span class="muted">action:</span> restart, re-tape, re-try, carry on
+
+You’ve rebuilt your day a thousand times and made 2,000 more decisions than anyone else.
+That’s superhero behavior.
+(Like… spiderman, but with insulin.)`,
+
+`<span class="prompt">$</span> open --file="love_letter.txt"
+Jake,
+
+You do so much every day just to keep yourself alive.
+And it’s so easy for people to miss it because you’re quiet about it.
+But I don't miss it.
+Not now.
+Not ever.
+
+I see the planning.
+I see the interruptions.
+I see the strength.
+I see you.
+
+And I love you more for all of it.
+
+— Chance`,
+
+`<span class="prompt">$</span> enable spiderman_mode
+<span class="ok">✓</span> web_developer = true
+<span class="ok">✓</span> web_slinger = spiritually true
+<span class="muted">quote:</span> “with great power comes great responsibility”
+
+You carry a kind of responsibility every day that most people never have to think about.
+And you carry it with so much grace it’s almost unfair.
+
+But listen:
+You don’t have to carry it alone anymore.`,
+
+`<span class="prompt">$</span> final --confirm
+<span class="ok">✓</span> proposal_received = true
+<span class="ok">✓</span> answer = YES (still yes. always yes.)
+<span class="ok">✓</span> forever = enabled
+
+<span class="ok">You are seen.</span>
+<span class="ok">You are loved.</span>
+<span class="ok">And you’re stuck with me.</span>
+
+Now come here so I can kiss your face.`,
+  `<span class="prompt">$</span> deploy --env=forever
+<span class="ok">✓</span> merging branches: jake + chance
+<span class="ok">✓</span> conflict resolution: none required
+<span class="ok">✓</span> build status: stable
+<span class="ok">✓</span> uptime: lifetime
+
+<span class="muted">commit message:</span>
+"marrying my best friend and favorite superhero."
+
+<span class="ok">Deployment successful.</span>`
+
+];
+
+// ===== DOM =====
+const term = document.getElementById("terminal");
+const pills = document.getElementById("statusPills");
+const questList = document.getElementById("questList");
+const gitList = document.getElementById("gitList");
+const cmd = document.getElementById("command");
+const send = document.getElementById("send");
+
+const overlay = document.getElementById("overlay");
+const bossResult = document.getElementById("bossResult");
+
+const dexNow = document.getElementById("dexNow");
+const dexTrend = document.getElementById("dexTrend");
+const dexPath = document.getElementById("dexPath");
+const dexDot = document.getElementById("dexDot");
+
+let idx = 0;
+let typing = false;
+let typeTimer = null;
+
+// ===== UI BUILD =====
+function renderQuests(){
+  questList.innerHTML = quests.map(q => `
+    <div class="item">
+      <div class="icon ${q.cls}">${q.icon}</div>
+      <div>${q.text}</div>
+    </div>
+  `).join("");
+}
+
+function renderCommits(){
+  gitList.innerHTML = commits.map(c => `
+    <div class="item">
+      <div class="icon blue">⎇</div>
+      <div><span class="muted">${c.hash}</span> — ${c.msg}</div>
+    </div>
+  `).join("");
+}
+
+function renderPills(){
+  const set = pillSets[idx % pillSets.length];
+  pills.innerHTML = set.map(p => `<span class="pill ${p.cls}">${p.text}</span>`).join("");
+}
+
+// fake dexcom line generator (mmol/L)
+function buildDexPath(){
+  const pts = [];
+  let y = 62;
+  for (let x=0; x<=300; x+=20){
+    y += (Math.sin((x/35)+1.4)*6) + (Math.cos((x/60)+0.7)*4);
+    y = Math.max(18, Math.min(108, y));
+    pts.push([x, y]);
+  }
+
+  const d = pts.map((p, i) => (i===0 ? `M ${p[0]} ${p[1]}` : `L ${p[0]} ${p[1]}`)).join(" ");
+  dexPath.setAttribute("d", d);
+
+  const last = pts[pts.length-1];
+  dexDot.setAttribute("cx", last[0]-10);
+  dexDot.setAttribute("cy", last[1]);
+
+  // ✅ mmol/L
+  const nowMmol = 4.8 + Math.random() * 4.2; // 4.8–9.0
+  dexNow.textContent = `${nowMmol.toFixed(1)} mmol/L`;
+  dexNow.className = (nowMmol < 3.9) ? "err" : (nowMmol > 10) ? "warn" : "ok";
+
+  const r = Math.random();
+  dexTrend.textContent = (r < 0.55) ? "→ steady" : (r < 0.8) ? "↘ drifting" : "↗ climbing";
+}
+
+// typing effect
+function typeHTML(html){
+  typing = true;
+  clearTimeout(typeTimer);
+
+  const temp = document.createElement("div");
+  temp.innerHTML = html.replaceAll("<br>", "\n").replaceAll("<br/>", "\n").replaceAll("<br />", "\n");
+  const text = temp.textContent || temp.innerText || "";
+
+  term.innerHTML = "";
+  let i = 0;
+
+  const tick = () => {
+    if (i <= text.length){
+      term.textContent = text.slice(0, i) + (i < text.length ? "▌" : "");
+      i += Math.max(1, Math.round(text.length / 260));
+      typeTimer = setTimeout(tick, 12);
+    } else {
+      term.innerHTML = html + `<span class="caret" aria-hidden="true"></span>`;
+      typing = false;
+    }
+  };
+  tick();
+}
+
+function show(){
+  renderPills();
+  typeHTML(slides[idx]);
+}
+
+// ===== NAV BUTTONS =====
+document.getElementById("next").onclick = () => {
+  if (typing) return;
+  idx = (idx + 1) % slides.length;
+  show();
+};
+document.getElementById("back").onclick = () => {
+  if (typing) return;
+  idx = (idx - 1 + slides.length) % slides.length;
+  show();
+};
+document.getElementById("random").onclick = () => {
+  if (typing) return;
+  idx = Math.floor(Math.random() * slides.length);
+  show();
+};
+document.getElementById("replay").onclick = () => {
+  if (typing) return;
+  idx = 0;
+  show();
+};
+
+// ===== spider-web confetti =====
+function launchSpiderWebConfetti({
+  count = 70,
+  durationMs = 9000,
+  colors = ["#e9eefc", "#7aa7ff", "#60ff9a", "#ffd166", "#ff5d7a"]
+} = {}) {
+
+  const layer = document.createElement("div");
+  layer.className = "web-confetti-layer";
+  document.body.appendChild(layer);
+
+  const webSvg = (stroke) => `
+    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="32" cy="32" r="26" stroke="${stroke}" stroke-width="2" opacity="0.95"/>
+      <path d="M32 6V58M6 32H58M14 14L50 50M50 14L14 50" stroke="${stroke}" stroke-width="2" opacity="0.95"/>
+      <circle cx="32" cy="32" r="19" stroke="${stroke}" stroke-width="2" opacity="0.75"/>
+      <circle cx="32" cy="32" r="12" stroke="${stroke}" stroke-width="2" opacity="0.6"/>
+      <circle cx="32" cy="32" r="6"  stroke="${stroke}" stroke-width="2" opacity="0.45"/>
+      <path d="M18 22c6 4 22 4 28 0M18 42c6-4 22-4 28 0" stroke="${stroke}" stroke-width="2" opacity="0.6"/>
+    </svg>
+  `;
+
+  for (let i = 0; i < count; i++){
+    const piece = document.createElement("div");
+    piece.className = "web-confetti";
+
+    const x = Math.random() * 100;
+    const drift = (Math.random() * 180 - 90);
+    const wobble = (Math.random() * 16 - 8);
+    const dur = 3.8 + Math.random() * 3.4;
+    const size = 14 + Math.random() * 18;
+    const stroke = colors[Math.floor(Math.random() * colors.length)];
+
+    piece.style.left = x + "vw";
+    piece.style.setProperty("--drift", drift + "px");
+    piece.style.setProperty("--wobble", wobble.toFixed(2));
+    piece.style.setProperty("--dur", dur.toFixed(2) + "s");
+    piece.style.setProperty("--s", size.toFixed(0) + "px");
+
+    piece.innerHTML = webSvg(stroke);
+    layer.appendChild(piece);
+  }
+
+  setTimeout(() => layer.remove(), durationMs);
+}
+
+// ===== BOSS FIGHT (upgraded) =====
+let bossHP = 3;
+
+function renderBossHP(){
+  const bar = overlay.querySelector(".hp > div");
+  const pct = Math.max(0, (bossHP / 3) * 100);
+  bar.style.width = pct + "%";
+}
+
+function hitBoss(message){
+  if (bossHP === 0) return;
+
+  bossHP = Math.max(0, bossHP - 1);
+  bossResult.textContent = message;
+  renderBossHP();
+
+  if (bossHP === 0){
+    bossResult.textContent =
+      "VICTORY: 3AM LOW defeated. You win anyway (as usual). Now go back to sleep, superhero.";
+
+    launchSpiderWebConfetti({ count: 90, durationMs: 9000 });
+
+    setTimeout(() => overlay.classList.remove("show"), 10000);
+  }
+}
+
+document.getElementById("bossBtn").onclick = () => {
+  bossResult.textContent = "";
+  bossHP = 3;
+  renderBossHP();
+  overlay.classList.add("show");
+};
+document.getElementById("closeBoss").onclick = () => overlay.classList.remove("show");
+
+document.getElementById("actTreat").onclick = () =>
+  hitBoss(`You deploy ${profile.emergencySnacks}. CRITICAL HEAL. The boss flinches.`);
+document.getElementById("actRecheck").onclick = () =>
+  hitBoss("You recheck like a responsible legend. Data acquired. Boss weakened.");
+document.getElementById("actEaseOff").onclick = () =>
+  hitBoss("You adjust like a pro. “Nice try,” you whisper to the boss.");
+document.getElementById("actPanic").onclick = () =>
+  hitBoss("You panic for 0.7 seconds, then immediately become competent again. Relatable.");
+document.getElementById("actWin").onclick = () =>
+  hitBoss("You win anyway. Because you always do. And because Chance is cheering from the party chat.");
+
+// ===== COMMAND EASTER EGGS =====
+function appendToTerminal(html){
+  term.innerHTML = term.innerHTML.replace(/<span class="caret"[\s\S]*?<\/span>/, "");
+  term.innerHTML += `\n\n` + html + `<span class="caret" aria-hidden="true"></span>`;
+}
+
+function handleCommand(raw){
+  const input = (raw || "").trim().toLowerCase();
+  if (!input) return;
+
+  appendToTerminal(`<span class="prompt">$</span> ${escapeHtml(raw)}`);
+
+  if (input === "help"){
+    appendToTerminal(
+`<span class="ok">Commands:</span>
+<span class="muted">help</span> — show this list
+<span class="muted">i_love_you</span> — reveal a secret message
+<span class="muted">spiderman</span> — toggle spidey lore
+<span class="muted">treat()</span> — emergency snack protocol
+<span class="muted">commit --log</span> — print the love git log
+<span class="muted">bossfight()</span> — open the 3am low boss fight`);
+    return;
+  }
+
+  if (input === "i_love_you" || input === "iloveyou"){
+    appendToTerminal(
+`<span class="ok">SECRET UNLOCKED:</span>
+Babe… you are my favorite person and my favorite part of every day.
+I see every invisible thing you do to stay alive.
+And I love you so much it makes my chest hurt.
+— Chance`);
+    return;
+  }
+
+  if (input === "spiderman"){
+    appendToTerminal(
+`<span class="blue">SPIDER-MAN MODE:</span>
+Friendly neighborhood ${profile.name} detected.
+With great power comes great responsibility…
+and you carry both with ridiculous grace.
+Also: being a web developer is basically web-slinging. I don’t make the rules.`);
+    return;
+  }
+
+  if (input === "treat()"){
+    appendToTerminal(
+`<span class="warn">LOW PROTOCOL:</span>
+deploy(${profile.emergencySnacks})
+<span class="ok">✓</span> heal applied
+<span class="muted">note:</span> Chance would like to add one (1) forehead kiss to the protocol.`);
+    return;
+  }
+
+  if (input === "commit --log" || input === "git log" || input === "commit"){
+    const log = commits.map(c => `• <span class="muted">${c.hash}</span> ${escapeHtml(c.msg)}`).join("\n");
+    appendToTerminal(`<span class="ok">git log --oneline</span>\n${log}`);
+    return;
+  }
+
+  // NEW: inside nickname
+  if (input === "my whatever" || input === "mywhatever"){
+    appendToTerminal(
+`<span class="ok">NICKNAME DETECTED:</span>
+<span class="muted">alias:</span> “my whatever”
+<span class="ok">✓</span> status: Jake’s favorite person
+<span class="muted">note:</span> “my whatever” actually means:
+<i>my home, my best friend, my forever.</i>`);
+    return;
+  }
+
+  // NEW: jellybeans inventory
+  if (input === "jellybeans" || input === "jelly beans"){
+    appendToTerminal(
+`<span class="warn">INVENTORY CHECK:</span>
+• jelly beans: <span class="ok">available</span>
+• choc teddies: <span class="ok">available</span>
+• spare charger: <span class="muted">probably not</span>
+• emotional support fiancée: <span class="ok">always online</span>
+
+<span class="muted">tip:</span> if low → run <span class="warn">treat()</span> immediately.`);
+    return;
+  }
+
+  // NEW: marry me moment
+  if (input === "marry me" || input === "marry_me" || input === "marryme"){
+    appendToTerminal(
+`<span class="ok">PROMPT:</span> marry_me?
+<span class="ok">RESPONSE:</span> yes. yes. a thousand times yes.
+<span class="muted">author:</span> Chance
+<span class="muted">ps:</span> come here so I can kiss your face, fiancé.`);
+    return;
+  }
+
+  if (input === "bossfight()" || input === "boss fight" || input === "bossfight"){
+    overlay.classList.add("show");
+    appendToTerminal(`<span class="warn">Opening encounter:</span> 03:00_LOW.exe`);
+    return;
+  }
+
+  appendToTerminal(`<span class="muted">command not found:</span> ${escapeHtml(raw)}\n<span class="muted">try:</span> help`);
+}
+
+function escapeHtml(str){
+  return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+send.onclick = () => {
+  if (typing) return;
+  const v = cmd.value;
+  cmd.value = "";
+  handleCommand(v);
+};
+
+cmd.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") send.click();
+});
+
+// ===== INIT =====
+renderQuests();
+renderCommits();
+buildDexPath();
+show();
