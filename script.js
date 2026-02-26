@@ -113,7 +113,7 @@ And yet… you are.`,
 
 That’s the part that blows my mind:
 You’re constantly thinking ahead to protect future-you.
-You’re the brains for yourself <i>and</i> the CGM.`,
+You’re the brains for yourself <i>and</i> your pump.`,
 
 `<span class="prompt">$</span> debug --issue="blocked pump"
 <span class="err">ERROR:</span> infusion blocked / delivery interrupted
