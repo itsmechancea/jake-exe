@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>jake.exe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- link CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <div class="dots" aria-hidden="true">
+        <span class="dot red"></span><span class="dot amb"></span><span class="dot grn"></span>
+      </div>
+      <span>local • love-os</span>
+    </div>
+    <div class="badge">gift build: fiancé_patch_v2.0 • author: chance</div>
+  </div>
+
+  <div class="grid">
+    <!-- MAIN TERMINAL -->
+    <div class="panel" id="mainPanel">
+      <div class="panel-head">
+        <div class="title">
+          <span class="muted">~/projects/</span>
+          <span class="file">jake.exe</span>
+        </div>
+        <div class="status" id="statusPills"></div>
+      </div>
+
+      <div class="terminal" id="terminal" aria-live="polite"></div>
+
+      <div class="controls">
+        <button class="primary" id="next">run next()</button>
+        <button id="back">undo()</button>
+        <button id="random">rand()</button>
+        <button class="danger" id="replay">rebuild()</button>
+        <button id="bossBtn">bossfight()</button>
+      </div>
+
+      <div class="cmd">
+        <label for="command"><span class="prompt">$</span> command</label>
+        <input id="command"
+          placeholder="try: help • i_love_you • spiderman • treat() • commit --log • my whatever • jellybeans • marry me"
+          autocomplete="off"/>
+        <button class="send" id="send">enter</button>
+      </div>
+
+      <div class="footer">
+        <span class="small">Tip: press <b>run next()</b> like you’re deploying love to production.</span>
+        <span class="hint">Easter eggs: <b>help</b>, <b>i_love_you</b>, <b>spiderman</b>, <b>treat()</b>, <b>commit --log</b>, <b>my whatever</b>, <b>jellybeans</b>, <b>marry me</b></span>
+      </div>
+
+      <!-- Boss Fight Overlay -->
+      <div class="overlay" id="overlay">
+        <div class="boss">
+          <div class="boss-head">
+            <span>encounter: 03:00_LOW.exe</span>
+            <span class="pill warn">difficulty: hard mode</span>
+          </div>
+          <div class="boss-body">
+            <h3 class="boss-title">BOSS FIGHT: 3AM LOW</h3>
+            <div class="muted">The room is dark. The Dexcom whispers. Your body decides it’s time for chaos.</div>
+            <div class="hp"><div></div></div>
+            <div><span class="warn">status:</span> shaky.exe • sweaty.css • brainFog.js</div>
+            <div class="muted" style="margin-top:10px">
+              Choose your action (you always win, but still):
+            </div>
+            <div class="boss-actions">
+              <button id="actTreat">treat()</button>
+              <button id="actRecheck">recheck()</button>
+              <button id="actEaseOff">ease_off()</button>
+              <button id="actPanic">panic()</button>
+              <button class="primary" id="actWin">win_anyway()</button>
+              <button class="danger" id="closeBoss">escape()</button>
+            </div>
+            <div id="bossResult" class="muted" style="margin-top:12px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE STACK -->
+    <div class="side">
+      <!-- Quest log -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="title"><span class="file">questlog.md</span></div>
+          <div class="status"><span class="pill blue">party: chance + jake</span></div>
+        </div>
+        <div class="block">
+          <h2>Daily Quests (Jake Edition)</h2>
+          <p>
+            A nerdy tribute to the stuff you do every day that most people never notice.
+            <br/>Chance notices. Always.
+          </p>
+          <div class="list" id="questList"></div>
+        </div>
+        <div class="footer">
+          <span class="small">Loot: chemist jelly beans + choc teddies 🍬🐻 (legendary rarity)</span>
+        </div>
+      </div>
+
+      <!-- Fake Dexcom graph -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="title"><span class="file">dexcom_ui.mock</span></div>
+          <div class="status">
+            <span class="pill blue">CGM: Dexcom</span>
+            <span class="pill ok">signal: stable-ish</span>
+          </div>
+        </div>
+        <div class="block">
+          <h2>Totally Real Dexcom Graph</h2>
+          <p>(Aesthetic only. But the vibe is: you’re constantly managing invisible chaos like a legend.)</p>
+
+          <div class="dexcom">
+            <div class="dex-top">
+              <span>now: <span class="ok" id="dexNow">6.2 mmol/L</span></span>
+              <span>trend: <span class="blue" id="dexTrend">→ steady</span></span>
+              <span>time range: 3h</span>
+            </div>
+            <svg class="spark" viewBox="0 0 300 120" preserveAspectRatio="none">
+              <g opacity="0.35">
+                <line x1="0" y1="20" x2="300" y2="20" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
+                <line x1="0" y1="60" x2="300" y2="60" stroke="rgba(255,255,255,.14)" stroke-width="1"/>
+                <line x1="0" y1="100" x2="300" y2="100" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
+              </g>
+              <rect x="0" y="40" width="300" height="40" fill="rgba(96,255,154,.08)"></rect>
+              <path id="dexPath" d="" fill="none" stroke="rgba(122,167,255,.9)" stroke-width="3" stroke-linecap="round"></path>
+              <circle id="dexDot" cx="290" cy="60" r="4.5" fill="rgba(96,255,154,.95)"></circle>
+            </svg>
+
+            <div class="dex-row">
+              <span class="chip ok">in range-ish</span>
+              <span class="chip warn">after lunch: watch me</span>
+              <span class="chip err">blocked pump: villain arc</span>
+              <span class="chip blue">chance_buff: ON</span>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <span class="small">Friendly neighborhood Jake-man: with great power comes great responsibility (and emergency gulcogon).</span>
+        </div>
+      </div>
+
+      <!-- Commit history -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="title"><span class="file">git_log.txt</span></div>
+          <div class="status">
+            <span class="pill ok">branch: forever</span>
+          </div>
+        </div>
+        <div class="block">
+          <h2>Commit History</h2>
+          <p>Love, but make it version control.</p>
+          <div class="list" id="gitList"></div>
+        </div>
+        <div class="footer">
+          <span class="small">PS: no rollbacks allowed. you’re stuck with Chance.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- link JS -->
+  <script src="script.js"></script>
+</body>
+</html>
